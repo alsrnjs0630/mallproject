@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: mallrestful
+
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@127.0.0.1:1521:xe
+    username: malldbuser
+    password: malldbuser
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
