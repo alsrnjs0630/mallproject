@@ -22,6 +22,7 @@ public class TodoController {
         return service.get(tno);
     }
 
+
     @GetMapping("/list")
     public PageResponseDTO<TodoDTO> list(PageRequestDTO pageRequestDTO) {
         log.info(pageRequestDTO);
