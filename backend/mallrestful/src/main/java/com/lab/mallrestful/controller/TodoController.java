@@ -38,6 +38,7 @@ public class TodoController {
         return Map.of("Tno", tno);
     }
 
+
     @PutMapping("/{tno}")
     public Map<String, String> modify(@PathVariable(name = "tno") Long tno, @RequestBody TodoDTO todoDTO) {
         todoDTO.setTno(tno);
