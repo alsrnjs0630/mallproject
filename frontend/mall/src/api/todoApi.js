@@ -18,7 +18,6 @@ export const getList = async(pageParam) => {
     // 요청을 보내는 주소는 'http://localhost:8080/api/todo/list?page={page}&size={size}'와 같다.
     return res.data
 }
-
 export const postAdd = async (todoObj) => {
     const res = await axios.post(`${prefix}/` , todoObj)
     return res.data
