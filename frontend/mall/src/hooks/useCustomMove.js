@@ -59,6 +59,7 @@ const useCustomMove = () => {
     // 수정 페이지로 이동
     const moveToModify = (num) => {
         console.log(queryDefault)
+        console.log(num)
 
         navigate({
             pathname: `../modify/${num}`,

@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {postAdd} from "../../api/todoApi";
 import ResultModal from "../common/ResultModal";
+import useCustomMove from "../../hooks/useCustomMove";
 
 const initState = {
     title:'',
@@ -16,6 +17,7 @@ const AddComponent = () => {
     // 결과 데이터가 있는 경우에는 ResultModal을 보여준다.
     const [result, setResult] = useState(null) //결과 상태
 
+    const {moveToList} = useCustomMove() // useCustomMove 활용 modal 창이 닫히면 목록 페이지로 이동
     /*
        * 스프레드 연산자('...')
        * 배열이나 객체의 요소들을 개별적으로 분리하여 새로운 배열이나 객체로 복사
@@ -46,6 +48,7 @@ const AddComponent = () => {
 
     const closeModal = () => {
         setResult(null)
+        moveToList() // Modal창이 닫히면 목록페이지로 이동
     }
 
     return (

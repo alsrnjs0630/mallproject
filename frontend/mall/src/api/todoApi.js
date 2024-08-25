@@ -1,4 +1,5 @@
 import axios from "axios"
+import todoRouter from "../router/todoRouter";
 
 // 서버 주소
 // API 서버의 기본 URL
@@ -12,17 +13,31 @@ export const getOne = async (tno) => {
     return res.data // 응답 객체에서 데이터 부분을 추출. 반환 : todo 항목의 데이터
 }
 
+// 목록
 export const getList = async(pageParam) => {
     const {page,size} = pageParam // pageParam 객체에서 page 와 size 속성 추출
     const res = await axios.get(`${prefix}/list`, {params: {page:page,size:size }})
     // 요청을 보내는 주소는 'http://localhost:8080/api/todo/list?page={page}&size={size}'와 같다.
     return res.data
 }
+
+// 등록
 export const postAdd = async (todoObj) => {
     const res = await axios.post(`${prefix}/` , todoObj)
     return res.data
 }
 
+// 삭제
+export const deleteOne = async  (tno) => {
+    const res = await axios.delete(`${prefix}/${tno}`)
+    return res.data
+}
+
+// 수정
+export const putOne = async (todo) => {
+    const res = await axios.put(`${prefix}/${todo.tno}`, todo)
+    return res.data
+}
 /*
 * 'async' : 함수 앞에 붙여서 비동기 함수를 정의. 이 함수는 항상 'Promise'를 반환.
 *  비동기 작업이 완료될 때까지 코드 실행을 일시 중지하고, 비동기 작업이 끝난 후 결과를 반환
