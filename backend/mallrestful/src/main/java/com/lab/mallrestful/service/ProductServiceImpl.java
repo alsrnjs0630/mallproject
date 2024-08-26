@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,5 +64,92 @@ public class ProductServiceImpl implements ProductService {
                 .totalCount(totalCount) // 전체 데이터의 총 개수
                 .pageRequestDTO(pageRequestDTO) // 클라이언트가 요청한 페이지네이션 정보를 담고 있는 DTO
                 .build();
+    }
+
+    // ProductDTO 객체를 Product 객체로 변환후 DB 저장. => 등록 메서드
+    @Override
+    public Long register(ProductDTO productDTO) {
+        Product product = dtoToEntity(productDTO); // DTO 객체를 Product 엔티티로 변환
+        Product result = productRepository.save(product); // 데이터베이스에 저장
+        return result.getPno(); // 제품 번호 pno 반환
+    }
+
+    private Product dtoToEntity(ProductDTO productDTO) {
+        Product product = Product.builder().pno(productDTO.getPno())
+                .pname(productDTO.getPname())
+                .pdesc(productDTO.getPdesc())
+                .price(productDTO.getPrice())
+                .build();
+
+        // 업로드 처리가 끝난 파일들의 이름 리스트
+        List<String> uploadFileNames = productDTO.getUploadFileNames();
+
+        if(uploadFileNames == null) {
+            return product;
+        }
+
+        uploadFileNames.stream().forEach(uploadName -> {
+            product.addImageString(uploadName);
+        });
+
+        return product;
+    }
+
+    @Override
+    public ProductDTO get(Long pno) {
+        java.util.Optional<Product> result = productRepository.selectOne(pno);
+        Product product = result.orElseThrow();
+        ProductDTO productDTO = entityDTO(product);
+        return productDTO;
+    }
+
+    private ProductDTO entityDTO(Product product) {
+        ProductDTO productDTO = ProductDTO.builder()
+                .pno(product.getPno())
+                .pname(product.getPname())
+                .pdesc(product.getPdesc())
+                .price(product.getPrice())
+                .build();
+
+        List<ProductImage> imageList = product.getImageList();
+
+        if(imageList == null || imageList.size() == 0) {
+            return productDTO;
+        }
+
+        List<String> fileNameList = imageList.stream().map(productImage -> productImage.getFileName()).toList();
+        productDTO.setUploadFileNames(fileNameList);
+
+        return productDTO;
+    }
+
+    @Override
+    public void modify(ProductDTO productDTO) {
+        // step1 read
+        Optional<Product> result = productRepository.findById(productDTO.getPno());
+
+        Product product= result.orElseThrow();
+
+        // change pname, pdesc, price
+        product.changeName(productDTO.getPname());
+        product.changeDesc(productDTO.getPdesc());
+        product.changePrice(productDTO.getPrice());
+
+        // upload File -- clear first
+        product.clearList();
+
+        List<String> uploadFileNames = productDTO.getUploadFileNames();
+
+        if(uploadFileNames != null && uploadFileNames.size() > 0) {
+            uploadFileNames.stream().forEach(uploadName -> {
+                product.addImageString(uploadName);
+            });
+        }
+        productRepository.save(product);
+    }
+
+    @Override
+    public void remove(Long pno) {
+        productRepository.updateToDelete(pno, true);
     }
 }
