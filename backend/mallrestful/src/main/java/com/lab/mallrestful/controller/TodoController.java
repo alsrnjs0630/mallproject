@@ -33,7 +33,13 @@ public class TodoController {
     @PostMapping("/")
     public Map<String, Long> register(@RequestBody TodoDTO todoDTO) {
         log.info("TodoDTO: " + todoDTO);
+        // 서비스 호출
         Long tno = service.register(todoDTO);
+        try{
+            Thread.sleep(3000);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
 
         // 생성된 Id(tno)를 JSON의 형태로 클라이언트에게 반환
         // 예) { "Tno" : 12 }

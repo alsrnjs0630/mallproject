@@ -34,7 +34,7 @@ public class ProductController {
 
         // 서비스 호출
         Long pno = productService.register(productDTO);
-        return Map.of("RESULT", pno);
+        return Map.of("result", pno);
     }
 
     @GetMapping("/view/{fileName}")

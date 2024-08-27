@@ -74,7 +74,9 @@ public class ProductServiceImpl implements ProductService {
         return result.getPno(); // 제품 번호 pno 반환
     }
 
+    // DTO 객체를 Product Entity로 변환 하는 메서드
     private Product dtoToEntity(ProductDTO productDTO) {
+        // 빌드 패턴을 이용해서 파라미터로 받아온 DTO 메서드 정보를 product 객체에 등록
         Product product = Product.builder().pno(productDTO.getPno())
                 .pname(productDTO.getPname())
                 .pdesc(productDTO.getPdesc())
@@ -84,10 +86,12 @@ public class ProductServiceImpl implements ProductService {
         // 업로드 처리가 끝난 파일들의 이름 리스트
         List<String> uploadFileNames = productDTO.getUploadFileNames();
 
+        // 업로드 된 파일이 없으면 product 객체만 반환
         if(uploadFileNames == null) {
             return product;
         }
 
+        // 업로드 된 파일들은 product 객체에 추가
         uploadFileNames.stream().forEach(uploadName -> {
             product.addImageString(uploadName);
         });
@@ -97,13 +101,18 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO get(Long pno) {
+        // 파라미터로 받아온 상품 정보 조회
         java.util.Optional<Product> result = productRepository.selectOne(pno);
+        // 상품이 없으면 예외 던짐
         Product product = result.orElseThrow();
+        // product 엔티티 DTO 객체로 변환
         ProductDTO productDTO = entityDTO(product);
         return productDTO;
     }
 
+    // product 엔티티를 DTO 객체로 변환
     private ProductDTO entityDTO(Product product) {
+        // DTO 빌더 패턴을 사용해서 product 엔티티 -> DTO 객체
         ProductDTO productDTO = ProductDTO.builder()
                 .pno(product.getPno())
                 .pname(product.getPname())
@@ -111,26 +120,33 @@ public class ProductServiceImpl implements ProductService {
                 .price(product.getPrice())
                 .build();
 
+        // 상품 정보에 등록된 이미지 목록 저장
         List<ProductImage> imageList = product.getImageList();
 
+        // 상품에 저장된 이미지가 없으면 DTO만 반환
         if(imageList == null || imageList.size() == 0) {
             return productDTO;
         }
 
+        // 저장된 이미지 리스트 DTO에 저장
         List<String> fileNameList = imageList.stream().map(productImage -> productImage.getFileName()).toList();
         productDTO.setUploadFileNames(fileNameList);
 
         return productDTO;
     }
 
+    // 수정 메서드
     @Override
     public void modify(ProductDTO productDTO) {
         // step1 read
+        // 파라미터로 받아온 DTO에서 상품 번호 추출후 조회
         Optional<Product> result = productRepository.findById(productDTO.getPno());
 
+        // 조회 결과가 없으면 예외 던짐
         Product product= result.orElseThrow();
 
         // change pname, pdesc, price
+        // 상품 정보 수정
         product.changeName(productDTO.getPname());
         product.changeDesc(productDTO.getPdesc());
         product.changePrice(productDTO.getPrice());
