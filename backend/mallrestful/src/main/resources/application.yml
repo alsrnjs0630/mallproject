@@ -24,3 +24,10 @@ com:
   lab:
     upload:
       path: upload
+
+logging:
+  level:
+    org:
+      springframework:
+        security:
+          web: TRACE

@@ -15,12 +15,12 @@ public class CustomSerevletConfig implements WebMvcConfigurer {
         registry.addFormatter(new LocalDateFormatter());
     }
 
-    @Override
-    /*
+    /*@Override
+    *//*
     CORS(Cross-Origin Resource Sharing) 설정
     웹 애플리케이션이 다른 도메인, 프로토콜, 포트에서 요청을 수락할 수 있도록 제어
     서로 다른 출처 간의 요청을 허용하거나 제한하는데 사용
-    */
+    *//*
     // CorsRegistry : CORS 설정을 추가하고 관리하는 객체
     public void addCorsMappings(CorsRegistry registry) {
         // addMapping("/**") : 모든 URL 경로에 대해 CORS 설정 적용
@@ -33,5 +33,5 @@ public class CustomSerevletConfig implements WebMvcConfigurer {
                 .maxAge(300)
                 // 허용되는 요청 헤더 설정
                 .allowedHeaders("Authorization", "Cache-Control", "Content-Type");
-    }
+    }*/
 }
