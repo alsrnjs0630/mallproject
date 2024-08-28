@@ -56,8 +56,6 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             printWriter.print(msg);
             printWriter.close();
         }
-
-        filterChain.doFilter(request, response);
     }
 
     @Override

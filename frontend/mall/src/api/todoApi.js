@@ -1,5 +1,4 @@
-import axios from "axios"
-import todoRouter from "../router/todoRouter";
+import jwtAxios from "../util/jwtUtil";
 
 // 서버 주소
 // API 서버의 기본 URL
@@ -8,7 +7,7 @@ export const API_SERVER_HOST = 'http://localhost:8080'
 const prefix = `${API_SERVER_HOST}/api/todo` // 최종 기본경로
 
 export const getOne = async (tno) => {
-    const res = await axios.get(`${prefix}/${tno}`) // URL로 GET요청을 보냄 get호출이 완료될 때까지 코드 실행 일시중지.
+    const res = await jwtAxios.get(`${prefix}/${tno}`) // URL로 GET요청을 보냄 get호출이 완료될 때까지 코드 실행 일시중지.
 
     return res.data // 응답 객체에서 데이터 부분을 추출. 반환 : todo 항목의 데이터
 }
@@ -16,26 +15,26 @@ export const getOne = async (tno) => {
 // 목록
 export const getList = async(pageParam) => {
     const {page,size} = pageParam // pageParam 객체에서 page 와 size 속성 추출
-    const res = await axios.get(`${prefix}/list`, {params: {page:page,size:size }})
+    const res = await jwtAxios.get(`${prefix}/list`, {params: {page:page,size:size }})
     // 요청을 보내는 주소는 'http://localhost:8080/api/todo/list?page={page}&size={size}'와 같다.
     return res.data
 }
 
 // 등록
 export const postAdd = async (todoObj) => {
-    const res = await axios.post(`${prefix}/` , todoObj)
+    const res = await jwtAxios.post(`${prefix}/` , todoObj)
     return res.data
 }
 
 // 삭제
 export const deleteOne = async  (tno) => {
-    const res = await axios.delete(`${prefix}/${tno}`)
+    const res = await jwtAxios.delete(`${prefix}/${tno}`)
     return res.data
 }
 
 // 수정
 export const putOne = async (todo) => {
-    const res = await axios.put(`${prefix}/${todo.tno}`, todo)
+    const res = await jwtAxios.put(`${prefix}/${todo.tno}`, todo)
     return res.data
 }
 /*

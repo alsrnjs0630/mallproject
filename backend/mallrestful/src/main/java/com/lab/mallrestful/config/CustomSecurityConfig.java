@@ -76,7 +76,7 @@ public class CustomSecurityConfig {
         // setAllowedOriginPatterns : 허용된 출처(origin) 패턴 설정 : 현재 모든 출처 허용(= 모든 도메인에서 요청 허용)
         configuration.setAllowedOriginPatterns(Arrays.asList("*"));
         // setAllowedMethods : 허용된 HTTP 메서드 지정. 지정된 요청만 허용
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedMethods(Arrays.asList("HEAD","GET", "POST", "PUT", "DELETE"));
         // setAllowedHeaders : 허용된 요청 헤더 지정. 클라이언트가 서버로 보낼 수 있는 헤더 정의
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         // setAllowCredentials : 자격 증명(쿠키, 인증 정보 등)을 포함한 요청을 허용할지 여부 설정
