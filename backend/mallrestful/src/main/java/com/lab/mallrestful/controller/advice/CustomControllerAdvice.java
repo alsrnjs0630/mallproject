@@ -1,5 +1,6 @@
 package com.lab.mallrestful.controller.advice;
 
+import com.lab.mallrestful.controller.util.CustomJWTException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -24,5 +25,13 @@ public class CustomControllerAdvice {
     protected ResponseEntity<?> handleIlleagalArgumentException(MethodArgumentNotValidException e) {
         String msg = e.getMessage();
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(Map.of("msg",msg));
+    }
+
+    // CustomJWTException 예외 발생시 JSON 문자열 전송
+    @ExceptionHandler(CustomJWTException.class)
+    protected ResponseEntity<?> handleJWTException(CustomJWTException e) {
+        String msg = e.getMessage();
+
+        return ResponseEntity.ok().body(Map.of("error",msg));
     }
 }
